@@ -8,6 +8,15 @@
       'access callback' => TRUE,
       'type' => MENU_NORMAL_ITEM,
     );
+
+    $items['cipher_result'] = array(
+      'title' => 'result',
+      'page callback' => 'show_cipher_result',
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    );
+
+
     return $items;
   }
 
@@ -40,8 +49,6 @@
       '#type' => 'submit',
       '#value' => 'submit',
     );
-
-
     return $form;
   }
 
@@ -62,11 +69,49 @@
         }
       }
     }
+  //END OF ELEMENT VALIDATION HELPER
 
 
-    // $s_alphabet = range("a", "z");
-    // $l_alphabet = range("A", "Z");
 
-    // $s_alphabet = array["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-    //
-    // $l_alphabet = array["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+
+
+  //
+  function cipher_form_submit($form, &$form_state){
+
+    $shift_value = $form_state['values']['shift_value'];
+    $direction = $form_state['values']['direction'];
+    $phrase = $form_state['values']['phrase'];
+    $alphabet_list = range("a", "z");
+    $split_str = str_split(strtolower($form_state['values']['phrase']));
+
+
+    if($direction == 'left'){
+      $shift_value = -1 * $shift_value;
+    }
+
+    for($i=0; $i<count($split_str); $i++){
+      if(ctype_alpha($split_str[$i])){
+        $key = array_search($split_str[$i], $alphabet_list, true);
+        $replace_key = $key + $shift_value;
+
+        if(isset($replace_key)){
+          if($replace_key > 25) {
+            $replace_key -= 26;
+          }
+
+          if($replace_key < 0) {
+            $replace_key += 26;
+          }
+
+          $split_str[$i] = $alphabet_list[$replace_key];
+        }
+      }
+    }
+
+    $_SESSION['output'] = implode($split_str);
+    $form_state['redirect'] = 'cipher_result';
+  }
+
+  function show_cipher_result() {
+    return "".$_SESSION['output'];
+  }
