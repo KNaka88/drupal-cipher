@@ -1,0 +1,5 @@
+name = Shift Cipher
+description = receive user input, shift values, and direction and shift the word.
+core = 7.x
+package = Custom
+files[] = cipher.module
