@@ -27,11 +27,20 @@
       '#element_validate' => array('direction_validate'),
       '#required' => true,
     );
-    
+
+    $form['phrase'] = array(
+      '#title' => 'Phrase',
+      '#description' => 'Plase input any phrases',
+      '#type' => 'textfield',
+      '#element_validate' => array('phrase_validate'),
+      '#required' => true,
+    );
+
     $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'submit',
     );
+
 
     return $form;
   }
@@ -44,3 +53,20 @@
        form_error($element, t('please type either "right" or "left"'));
       }
     }
+
+    function phrase_validate($element) {
+      $split_str = str_split($element['#value']);
+      for($i=0; $i<count($split_str); $i++){
+        if(!ctype_punct($split_str[$i]) && !ctype_alpha($split_str[$i]) && !ctype_space($split_str[$i])){
+          form_error($element, t('only alphabet, spaces, and punctuation are allowed'));
+        }
+      }
+    }
+
+
+    // $s_alphabet = range("a", "z");
+    // $l_alphabet = range("A", "Z");
+
+    // $s_alphabet = array["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+    //
+    // $l_alphabet = array["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
