@@ -15,11 +15,11 @@
       'access callback' => TRUE,
       'type' => MENU_CALLBACK,
     );
-
-
     return $items;
   }
 
+  //////////////////////////
+  //FORM
   function cipher_form() {
     $form['shift_value'] = array(
       '#title' => 'Shift Value',
@@ -51,8 +51,12 @@
     );
     return $form;
   }
+  //END OF FORM
+  //////////////////////////
 
 
+
+  //////////////////////////
   //ELEMENT VALIDATION HELPER
     function direction_validate($element) {
       $received_input = trim($element['#value']);
@@ -70,31 +74,46 @@
       }
     }
   //END OF ELEMENT VALIDATION HELPER
+  //////////////////////////
 
 
 
 
-
-  //
+  //////////////////////////
+  //SHIFT CIPHER LOGIC
   function cipher_form_submit($form, &$form_state){
 
+    //Get user input from form
     $shift_value = $form_state['values']['shift_value'];
     $direction = $form_state['values']['direction'];
     $phrase = $form_state['values']['phrase'];
+
+    //create alphabet list (array(a~z))
     $alphabet_list = range("a", "z");
+
+    //create split user input as array
     $split_str = str_split(strtolower($form_state['values']['phrase']));
 
+    //eliminate overlooping
+    if($shift_value > 26){
+      $cycle = floor($shift_value / 26);
+      $shift_value -= 26 * $cycle;
+    }
 
+    //change direction based on user's direction input
     if($direction == 'left'){
       $shift_value = -1 * $shift_value;
     }
 
     for($i=0; $i<count($split_str); $i++){
+
+      //if the character was alphabet, replace the character
       if(ctype_alpha($split_str[$i])){
+        //check corresponding key number
         $key = array_search($split_str[$i], $alphabet_list, true);
         $replace_key = $key + $shift_value;
 
-        if(isset($replace_key)){
+          //if the number reached over 25 or less than 0, make loop
           if($replace_key > 25) {
             $replace_key -= 26;
           }
@@ -102,16 +121,23 @@
           if($replace_key < 0) {
             $replace_key += 26;
           }
-
           $split_str[$i] = $alphabet_list[$replace_key];
-        }
       }
     }
 
+    //save to SESSION and navigate to cipher_result
     $_SESSION['output'] = implode($split_str);
     $form_state['redirect'] = 'cipher_result';
   }
+  //SHIFT CIPHER LOGIC END//
+  //////////////////////////
 
+
+
+  //////////////////////////
+  //DISPLAY RESULT
   function show_cipher_result() {
     return "".$_SESSION['output'];
   }
+  //DISPLAY RESULT END
+  //////////////////////////
