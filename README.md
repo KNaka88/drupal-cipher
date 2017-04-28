@@ -10,9 +10,9 @@
 
 |Behavior|Input|Output|
 |--------|-----|------|
-| shift the character based on input value | value = 3, direction = right, phrase = 'hello' | 'knoor' |
-| shift the character order base on direction | value = 1, direction = left, phrase = 'hi there!' | 'gh sgdqd!' |
-| cycleback to the beginning if the value was over the bounds of the alphabet | value = 53, direction = left, phrase = 'abc!' | 'zab!' |
+| shift the character based on input value | value = 3 <br> direction = right <br> phrase = 'hello' | 'knoor' |
+| shift the character order base on direction | value = 1 <br> direction = left <br> phrase = 'hi there!' | 'gh sgdqd!' |
+| cycleback to the beginning if the value was over the bounds of the alphabet | value = 53 <br> direction = left <br> phrase = 'abc!' | 'zab!' |
 
 ## Prerequisites
 You will need the following things properly installed on your computer.
