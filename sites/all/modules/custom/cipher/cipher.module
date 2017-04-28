@@ -20,6 +20,14 @@
       '#required' => true,
     );
 
+    $form['direction'] = array(
+      '#title' => 'Shift Direction',
+      '#description' => 'Type either right or left',
+      '#type' => 'textfield',
+      '#element_validate' => array('direction_validate'),
+      '#required' => true,
+    );
+    
     $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'submit',
@@ -27,3 +35,12 @@
 
     return $form;
   }
+
+
+  //ELEMENT VALIDATION HELPER
+    function direction_validate($element) {
+      $received_input = trim($element['#value']);
+      if ($received_input != 'right' && $received_input != 'left') {
+       form_error($element, t('please type either "right" or "left"'));
+      }
+    }
